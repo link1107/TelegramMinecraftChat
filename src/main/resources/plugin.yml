@@ -1,0 +1,4 @@
+name: TelegramMinecraftChat
+version: '${project.version}'
+main: org.igorlink.telegramminecraftchat.TelegramMinecraftChat
+api-version: 1.19
