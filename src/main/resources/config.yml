@@ -1,0 +1,5 @@
+#You must create your telegram-bot vid https://t.me/botfather
+telegram-bot-api-key: place_token_here
+telegram-bot-username: place_username_here
+#You can find your telegram-id vid https://t.me/getmyid_bot
+telegram-bot-admin-id: place_your_telegram_id_here

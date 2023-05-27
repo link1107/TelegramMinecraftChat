@@ -2,3 +2,5 @@ name: TelegramMinecraftChat
 version: '${project.version}'
 main: org.igorlink.telegramminecraftchat.TelegramMinecraftChat
 api-version: 1.19
+author: Igor Link
+prefix: TelegramMinecraftChat
