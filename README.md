@@ -9,6 +9,7 @@
 - Create a telegram-bot using @botfather telegram-bot.
 - Go to 'plugins/TelegramMinecraftChat/config.yml' and add required credentials.
 
-##License
+### License
+
 The GNU General Public License v3.0
 https://www.gnu.org/copyleft/gpl.html
