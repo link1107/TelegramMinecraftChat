@@ -10,7 +10,7 @@ You can find a guide video about creating this plugin on my [Boosty](http://boos
 
 ### How to use
 
-- Put plugin's jar-file to plugins folder of your Paper-server.
+- Put plugin's jar-file to plugins folder of your Paper-server v1.19.4 or newer.
 - Run server, get an error.
 - Create a telegram-bot using @botfather telegram-bot.
 - Go to 'plugins/TelegramMinecraftChat/config.yml' and add required credentials.
