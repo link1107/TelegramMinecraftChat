@@ -3,7 +3,6 @@ package org.igorlink.telegramminecraftchat.telegrambot;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.TextColor;
-import net.kyori.adventure.util.RGBLike;
 import org.bukkit.Bukkit;
 import org.igorlink.telegramminecraftchat.TelegramMinecraftChat;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -11,31 +10,22 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 
-import java.util.logging.Logger;
-
 public class Bot extends TelegramLongPollingBot {
+    private final TelegramMinecraftChat telegramMinecraftChat; // Объект плагина, чтобы вытаскивать из него настройки при необходимости через #getConfig()
+    private final Long adminId; // Переменная с телеграмным ID админа
 
-    // Сохраняем объект плагина, чтобы вытаскивать из него настройки при необходимости через #getConfig()
-    private final TelegramMinecraftChat telegramMinecraftChat;
-
-    // Переменная с телеграмным ID админа
-    private final Long adminId;
-
-    // Получаем логгер плагина, чтобы выдавать сообщения в консоль сервера
-    private final Logger logger;
-
+    @SuppressWarnings("deprecation")
     public Bot(TelegramMinecraftChat telegramMinecraftChat) {
         super();
         this.telegramMinecraftChat = telegramMinecraftChat;
         this.adminId = telegramMinecraftChat.getConfig().getLong("telegram-bot-admin-id");
-        this.logger = telegramMinecraftChat.getLogger();
     }
 
     @Override
     public void onUpdateReceived(Update update) {
         Message message = update.getMessage();
 
-        // Проверяем, если в полученном апдейте есть сообщение от админа, и оно содержит текст...
+        // Проверяем, есть ли в полученном апдейте сообщение от админа, и оно содержит текст...
         if (message != null && message.getChat().getId().equals(adminId) && message.hasText()) {
             User messageSender = message.getFrom();
             String messageSenderFullName = messageSender.getFirstName() +
@@ -43,12 +33,11 @@ public class Bot extends TelegramLongPollingBot {
 
             // Создаем текст сообщения для сервера
             // Формат сообщения для сервера: <ИМЯ> Сообщение
-            TextComponent finalMessage = Component.text("<");
-            finalMessage = finalMessage.append(Component.text(messageSenderFullName, TextColor.color(0, 255,255)));
-            finalMessage = finalMessage.append(Component.text("> " + message.getText()));
+            TextComponent finalMessage = Component.text("<")
+                    .append(Component.text(messageSenderFullName, TextColor.color(0, 255,255)))
+                    .append(Component.text("> " + message.getText()));
 
-            // Отправляем сообщение на сервер всем пользователям
-            Bukkit.getServer().broadcast(finalMessage);
+            Bukkit.getServer().broadcast(finalMessage); // Отправляем сообщение на сервер всем пользователям
         }
     }
 
@@ -58,6 +47,7 @@ public class Bot extends TelegramLongPollingBot {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public String getBotToken() {
         return telegramMinecraftChat.getConfig().getString("telegram-bot-api-key");
     }
