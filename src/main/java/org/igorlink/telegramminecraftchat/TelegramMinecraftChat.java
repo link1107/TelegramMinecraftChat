@@ -12,47 +12,33 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public final class TelegramMinecraftChat extends JavaPlugin {
-
-    // Получаем логгер плагина, чтобы выдавать сообщения в консоль сервера
-    private final Logger logger = this.getLogger();
+    private final Logger logger = this.getLogger(); // Получаем логгер, чтобы выдавать сообщения в консоль сервера
 
     @Override
     public void onEnable() {
-        // Сохраняем config.yml в папке с именем плагина, если папки еще нет или файла конфига в ней нет
-        saveDefaultConfig();
+        this.saveDefaultConfig(); // Сохраняем config.yml в папке с именем плагина, если файла конфига в ней нет
 
-        // Запускаем телеграм-бота
-        try {
-            // Запускаем телеграм-апи
-            TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
-            // Создаем и регистрируем нашего телеграм-бота
-            Bot telegramBot = new Bot(this);
+        try { // Запускаем телеграм-бота
+            TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class); // Запускаем телеграм-апи
+            Bot telegramBot = new Bot(this); // Создаем и регистрируем нашего телеграм-бота
             telegramBotsApi.registerBot(telegramBot);
-            // Пишем в консоль, что бот запущен
-            logger.log(Level.INFO, "Bot has been successfully initialized!");
+            logger.log(Level.INFO, "Bot has been successfully initialized!"); // Пишем в консоль, что бот запущен
 
-            // Регистрируем слушателя событий
-            Bukkit.getPluginManager().registerEvents(new GeneralEventListener(this, telegramBot), this);
+            Bukkit.getPluginManager().registerEvents(new GeneralEventListener(this, telegramBot), this); // Регистрируем слушателя событий
         } catch (TelegramApiException e) {
-            // Выдаем сообщение в случае ошибки
-            String errorMessage = "Bot has failed to launch! ";
-            // Если мы получили сообщение от телеграма об ошибке удалении вебхука...
-            if (e.getMessage().equals("Error removing old webhook")) {
-                // Советуем пользователю проверить, заполнил ли он токен и юзернейм бота в config.yml
-                errorMessage += "Check your bot-token and bot-username in 'plugins/TelegramBotsApi/config.yml'";
-            } else {
-                // ... в ином случае отображаем в консоли сообщение ошибки, которое нам выдал телеграм
-                errorMessage += "Reason: " + e.getMessage();
-            }
-
-            // Выдаем в консоль сообщение об ошибке
-            logger.log(Level.SEVERE, errorMessage);
+            // Если мы получили сообщение от телеграма об ошибке удаления вебхука, то советуем пользователю проверить,
+            // заполнил ли он токен и юзернейм бота в config.yml, иначе отображаем в консоли сообщение ошибки телеграма
+            logger.log(Level.SEVERE, "Bot has failed to launch! " +
+                    (e.getMessage().equalsIgnoreCase("Error removing old webhook") ?
+                            "Check your bot-token and bot-username in 'plugins/TelegramBotsApi/config.yml'" :
+                            "Reason: " + e.getMessage()
+                    )
+            );
         }
-
     }
 
     @Override
     public void onDisable() {
-
+        logger.log(Level.INFO, "Bot has been disabled!"); // Пишем в консоль, что бот выключен
     }
 }
