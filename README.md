@@ -7,11 +7,12 @@ You can find a guide video about creating this plugin on my [Boosty](http://boos
 ### Features
 
 - Creates a crosschat between your server and your telegram-bot. Just put your telegram-bot token, telegram-bot username and your telegram-id to config.yml of this plugin.
+- Allows you to manage your server via your telegram-bot.
 
 ### How to use
 
 - Put plugin's jar-file to plugins folder of your Paper-server v1.19.4 or newer.
-- Run server, get an error.
+- Run server, get an error (this error is caused by the need to specify bot's Telegram API token and its username).
 - Create a telegram-bot using @botfather telegram-bot.
 - Go to 'plugins/TelegramMinecraftChat/config.yml' and add required credentials.
 
