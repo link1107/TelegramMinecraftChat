@@ -2,6 +2,7 @@ package org.igorlink.telegramminecraftchat;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.igorlink.telegramminecraftchat.commands.BoomCommand;
 import org.igorlink.telegramminecraftchat.service.GeneralEventListener;
 import org.igorlink.telegramminecraftchat.telegrambot.Bot;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
@@ -49,6 +50,7 @@ public final class TelegramMinecraftChat extends JavaPlugin {
             logger.log(Level.SEVERE, errorMessage);
         }
 
+        new BoomCommand(this);
     }
 
     @Override

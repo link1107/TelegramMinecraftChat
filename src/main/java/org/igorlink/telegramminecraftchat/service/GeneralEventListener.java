@@ -31,7 +31,7 @@ public class GeneralEventListener implements Listener {
     @EventHandler
     public void handleChatMessage(AsyncChatEvent event) {
         // Получаем текст сообщения
-        String chatMessageText = ((TextComponent) event.message()).content();
+        String chatMessageText = event.signedMessage().message();
         // Получаем имя игрока-отправителя
         String senderPlayerName = event.getPlayer().getName();
 
