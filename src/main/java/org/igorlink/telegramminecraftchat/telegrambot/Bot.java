@@ -6,7 +6,7 @@ import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
 import org.igorlink.telegramminecraftchat.TelegramMinecraftChat;
-import org.igorlink.telegramminecraftchat.handling.MessageHandler;
+import org.igorlink.telegramminecraftchat.handling.UpdateHandler;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -28,7 +28,7 @@ import static org.igorlink.telegramminecraftchat.service.BotCommands.START_COMMA
 public class Bot extends TelegramLongPollingBot {
 
     // Сохраняем объект плагина, чтобы вытаскивать из него настройки при необходимости через #getConfig()
-    private final TelegramMinecraftChat telegramMinecraftChat;
+    private final TelegramMinecraftChat plugin;
 
     // Переменная с телеграмным ID админа
     @Getter
@@ -38,11 +38,11 @@ public class Bot extends TelegramLongPollingBot {
     private final Logger logger;
 
 
-    public Bot(TelegramMinecraftChat telegramMinecraftChat) {
+    public Bot(TelegramMinecraftChat plugin) {
         super();
-        this.telegramMinecraftChat = telegramMinecraftChat;
-        this.adminId = telegramMinecraftChat.getConfig().getLong("telegram-bot-admin-id");
-        this.logger = telegramMinecraftChat.getLogger();
+        this.plugin = plugin;
+        this.adminId = plugin.getConfig().getLong("telegram-bot-admin-id");
+        this.logger = plugin.getLogger();
 
         List<BotCommand> botRuCommands = Arrays.asList(
                 new BotCommand(START_COMMAND, "Открыть список игроков"),
@@ -81,7 +81,10 @@ public class Bot extends TelegramLongPollingBot {
 
         // Проверяем, если в полученном апдейте есть сообщение от админа, и оно содержит текст...
         if (message != null && message.getChat().getId().equals(adminId)) {
-            MessageHandler.handleMessage(message, this);
+
+            Bukkit.getScheduler().runTask(plugin, () -> {
+                UpdateHandler.handleMessage(message, this, plugin);
+            });
 
             User messageSender = message.getFrom();
             String messageSenderFullName = messageSender.getFirstName() +
@@ -95,17 +98,24 @@ public class Bot extends TelegramLongPollingBot {
 
             // Отправляем сообщение на сервер всем пользователям
             Bukkit.getServer().broadcast(finalMessage);
+            return;
+        }
+
+        if (update.hasCallbackQuery() && update.getCallbackQuery().getMessage().getChat().getId().equals(adminId)) {
+            Bukkit.getScheduler().runTask(plugin, () -> {
+                UpdateHandler.handleCallbackQuery(update.getCallbackQuery(), this, plugin);
+            });
         }
 
     }
 
     @Override
     public String getBotUsername() {
-        return telegramMinecraftChat.getConfig().getString("telegram-bot-username");
+        return plugin.getConfig().getString("telegram-bot-username");
     }
 
     @Override
     public String getBotToken() {
-        return telegramMinecraftChat.getConfig().getString("telegram-bot-api-key");
+        return plugin.getConfig().getString("telegram-bot-api-key");
     }
 }

@@ -4,6 +4,7 @@ main: org.igorlink.telegramminecraftchat.TelegramMinecraftChat
 api-version: 1.19
 author: Igor Link
 prefix: TelegramMinecraftChat
+chat-format: '[${world}] ${player}: ${message}'
 commands:
   boom:
     description: test

@@ -17,6 +17,8 @@ public final class TelegramMinecraftChat extends JavaPlugin {
     // Получаем логгер плагина, чтобы выдавать сообщения в консоль сервера
     private final Logger logger = this.getLogger();
 
+    public static TelegramMinecraftChat instance;
+
     @Override
     public void onEnable() {
         // Сохраняем config.yml в папке с именем плагина, если папки еще нет или файла конфига в ней нет
@@ -49,6 +51,8 @@ public final class TelegramMinecraftChat extends JavaPlugin {
             // Выдаем в консоль сообщение об ошибке
             logger.log(Level.SEVERE, errorMessage);
         }
+
+        instance = this;
 
         new BoomCommand(this);
     }
